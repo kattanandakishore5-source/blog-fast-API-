@@ -12,6 +12,11 @@ class Blog(BlogBase):
         from_attributes = True
 
 
+class UpdateBlog(BaseModel):
+    title: Optional[str] = None
+    body: Optional[str] = None
+
+
 class User(BaseModel):
     name: str
     email: str
@@ -19,6 +24,7 @@ class User(BaseModel):
 
 
 class ShowUser(BaseModel):
+    id: int
     name: str
     email: str
     blogs: List[Blog] = []
@@ -28,6 +34,7 @@ class ShowUser(BaseModel):
 
 
 class ShowBlog(BlogBase):
+    id: int
     creator: ShowUser
 
     class Config:

@@ -1,10 +1,16 @@
 from sqlalchemy.orm import Session
-from fastapi import Response, status
+from fastapi import HTTPException, status
 from .. import models, schemas
 from ..hashing import Hash
 
 
 def create(request: schemas.User, db: Session):
+    existing = db.query(models.User).filter(models.User.email == request.email).first()
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered"
+        )
     new_user = models.User(
         name=request.name,
         email=request.email,
@@ -19,8 +25,8 @@ def create(request: schemas.User, db: Session):
 def show(id: int, db: Session):
     user = db.query(models.User).filter(models.User.id == id).first()
     if not user:
-        return Response(
-            content=f"User with id {id} not found",
-            status_code=status.HTTP_404_NOT_FOUND
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {id} not found"
         )
     return user
