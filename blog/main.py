@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
-from .routers import blog, user, authentication
+from .routers import blog, user, authentication, comment
 from .database import engine
 
 app = FastAPI()
@@ -24,3 +24,4 @@ app.add_middleware(
 app.include_router(blog.router)
 app.include_router(user.router)
 app.include_router(authentication.router)
+app.include_router(comment.router)
